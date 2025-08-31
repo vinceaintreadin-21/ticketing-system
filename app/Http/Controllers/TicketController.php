@@ -18,7 +18,7 @@ class TicketController extends Controller
 
         $user = Auth::user();
 
-        if ($user->role === 'admin' || $user->role === 'mis') {
+        if ($user->role === 'mis') {
             $tickets = Ticket::with(['requester', 'attachments'])->latest()->get();
         } else {
             $tickets = Ticket::with('attachments')->where('user_id', $user->id)->get();
@@ -121,4 +121,5 @@ class TicketController extends Controller
 
         return redirect()->route('tickets.index')->with('success', 'Ticket deleted successfully.');
     }
+
 }
