@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('replies', function (Blueprint $table) {
+        Schema::create('ticket_attachments', function (Blueprint $table) {
             $table->id();
+            $table->string('file_path');
+            $table->string('file_type')->nullable();
+            $table->string('file_name')->nullable();
+            $table->unsignedBigInteger('file_size')->nullable();
             $table->foreignId('ticket_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->text('message');
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('replies');
+        Schema::dropIfExists('ticket_attachments');
     }
 };

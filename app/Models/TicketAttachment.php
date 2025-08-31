@@ -4,19 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Replies extends Model
+class TicketAttachment extends Model
 {
     protected $fillable = [
         'ticket_id',
-        'user_id',
-        'message',
+        'file_path',
+        'file_type',
+        'file_name',
+        'file_size',
     ];
 
     public function ticket() {
         return $this->belongsTo(Ticket::class, 'ticket_id');
-    }
-
-    public function user() {
-        return $this->belongsTo(User::class, 'user_id');
     }
 }

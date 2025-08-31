@@ -16,9 +16,17 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->text('description');
-            $table->enum('category',['developer', 'technicians']);
-            $table->enum('status', ['open', 'in_progress', 'closed'])->default('open');
-            $table->enum('priority', ['low', 'medium', 'high'])->default('medium');
+            $table->enum('type', ['bug', 'new_request', 'fix', 'enhancement', 'inquiry']);
+            $table->enum('category',['developer', 'technicians'])->nullable();
+            $table->enum('status', ['pending', 'ongoing', 'closed', 'resolved', 'cancelled'])->default('open');
+            $table->enum('urgency', ['low', 'medium', 'high'])->nullable();
+
+            $table->integer('priority')->default(0);
+            $table->date('expected_completion_date')->nullable();
+
+            $table->foreignId('department_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('requester_id')->nullable()->constrained('users')->cascadeOnDelete();
+
             $table->timestamps();
         });
     }

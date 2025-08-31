@@ -4,73 +4,90 @@ namespace App\Policies;
 
 use App\Models\Ticket;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class TicketPolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * Helper functions for roles.
      */
-    public function isAdmin(User $user): bool
+
+    protected function isMIS(User $user): bool
     {
-        return $user->role === 'admin';
+        return $user->role === 'mis';
     }
 
-    public function viewAny(User $user): bool
+    protected function isRequester(User $user): bool
     {
-        return $this->isAdmin($user);
+        return $user->role === 'requester';
     }
 
     /**
-     * Determine whether the user can view the model.
+     * View any tickets.
+     * Admin and MIS can see all tickets.
+     */
+    public function viewAny(User $user): bool
+    {
+        return $this->isMIS($user);
+    }
+
+    /**
+     * View a specific ticket.
+     * Admin and MIS can view all, requesters only their own.
      */
     public function view(User $user, Ticket $ticket): bool
     {
-        return $this->isAdmin($user) ||
+        return $this->isMIS($user) ||
                $user->id === $ticket->user_id;
     }
 
     /**
-     * Determine whether the user can create models.
+     * Create tickets.
+     * Requesters can create, but Admin/MIS should not (they only manage).
      */
     public function create(User $user): bool
     {
-        return $this->isAdmin($user);
+        return $this->isRequester($user);
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Update a ticket.
+     * Admin and MIS can update any, requesters can only update their own
+     * (e.g., before it’s being processed).
      */
     public function update(User $user, Ticket $ticket): bool
     {
-        return $this->isAdmin($user) ||
+        return $this->isMIS($user) ||
                $user->id === $ticket->user_id;
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Delete tickets.
+     * Only Admin, or the ticket owner if still pending.
      */
     public function delete(User $user, Ticket $ticket): bool
     {
-        return $this->isAdmin($user) ||
-               $user->id === $ticket->user_id;
+        if ($this->isMIS($user)) {
+            return true;
+        }
+
+        return $user->id === $ticket->user_id && $ticket->status === 'pending';
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Restore tickets (soft deletes).
+     * Only Admin.
      */
     public function restore(User $user, Ticket $ticket): bool
     {
-        return $this->isAdmin($user) ||
-               $user->id === $ticket->user_id;
+        return $this->isMIS($user);
     }
 
     /**
-     * Determine whether the user can permanently delete the model.
+     * Force delete tickets.
+     * Only Admin.
      */
     public function forceDelete(User $user, Ticket $ticket): bool
     {
-        return $this->isAdmin($user) ||
-               $user->id === $ticket->user_id;
+        return $this->isMIS($user);
     }
 }

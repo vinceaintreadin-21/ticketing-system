@@ -11,14 +11,18 @@ class Ticket extends Model
         'title',
         'description',
         'category',
+        'type',
+        'urgency',
+        'priority',
+        'expected_completion_date',
         'status',
         'priority'
     ];
-    public function user() {
-        return $this->belongsTo(User::class, 'user_id');
+    public function requester() {
+        return $this->belongsTo(User::class, 'requester_id');
     }
 
-    public function replies() {
-        return $this->hasMany(Replies::class, 'ticket_id');
+    public function attachments(){
+        return $this->hasMany(TicketAttachment::class);
     }
 }

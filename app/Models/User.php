@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'profile_pic',
         'role',
+        'department_id',
     ];
 
     /**
@@ -48,11 +49,14 @@ class User extends Authenticatable
         ];
     }
 
-    public function tickets() {
-        return $this->hasMany(Ticket::class);
+    public function department() {
+        return $this->belongsTo(Department::class, 'department_id');
     }
 
-    public function replies() {
-        return $this->hasMany(Replies::class);
+    public function tickets() {
+        return $this->hasMany(Ticket::class, 'requester_id');
     }
+    // public function replies() {
+    //     return $this->hasMany(Replies::class);
+    // }
 }

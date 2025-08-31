@@ -11,7 +11,7 @@
 
     <div class="w-full max-w-md bg-white shadow-lg rounded-2xl p-6">
         <h1 class="text-2xl font-bold text-gray-800 text-center mb-4">
-            Admin Dashboard
+            MIS Dashboard
         </h1>
 
         <p class="text-gray-700 mb-2">

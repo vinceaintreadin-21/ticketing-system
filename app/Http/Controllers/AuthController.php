@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -10,47 +11,52 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     public function showRegistrationForm() {
-        return view('auth.register-page');
+        $departments = Department::all();
+        return view('auth.register-page', compact('departments'));
     }
 
     public function showLoginForm() {
         return view('auth.login-page');
     }
     public function register(Request $request) {
-        $user = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-            'profile_pic' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'role' => 'in:user,admin',
-        ]);
+    $data = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+        'profile_pic' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'department_id' => 'nullable|exists:departments,id',
+    ]);
 
-        $role = 'user';
+    // default requester
+    $role = 'requester';
 
-        if (str_ends_with($user['email'], '@admin.com')) {
-            $role = 'admin';
-        }
-
-        $user = User::create([
-            'name' => $user['name'],
-            'email' => $user['email'],
-            'password' => Hash::make($user['password']),
-            'profile_pic' => $request->file('profile_pic') ? $request->file('profile_pic')->store('profile_pics', 'public') : null,
-            'role' => $role,
-        ]);
-
-        if (!$user) {
-            return back()->withErrors(['registration' => 'Registration failed. Please try again.'])->withInput();
-        }
-
-        if ($user->role === 'admin') {
-            return redirect()->route('admin-dashboard')->with('success', 'Admin registered successfully.');
-        }
-
-        Auth::login($user);
-
-        return redirect()->route('dashboard')->with('success', 'User registered successfully.');
+    if (str_ends_with($data['email'], '@mis.com')) {
+        $role = 'mis';
+    } elseif (str_ends_with($data['email'], '@staff.com')) {
+        $role = 'staff';
     }
+
+    $user = User::create([
+        'name' => $data['name'],
+        'email' => $data['email'],
+        'password' => Hash::make($data['password']),
+        'profile_pic' => $request->file('profile_pic')
+            ? $request->file('profile_pic')->store('profile_pics', 'public')
+            : null,
+        'role' => $role,
+    ]);
+
+    if ($user->role === 'mis') {
+        Auth::login($user);
+        return redirect()->route('admin.dashboard')
+                         ->with('success', 'MIS registered successfully.');
+    }
+
+    Auth::login($user);
+    return redirect()->route('dashboard')
+                     ->with('success', 'User registered successfully.');
+}
+
 
     public function login(Request $request) {
         $credentials = $request->validate([
@@ -63,7 +69,7 @@ class AuthController extends Controller
 
             $user = Auth::user();
 
-            if ($user->role === 'admin') {
+            if ($user->role === 'mis') {
                 return redirect()->route('admin.dashboard')->with('success', 'Logged in successfully as admin.');
             }
 
@@ -80,7 +86,7 @@ class AuthController extends Controller
     }
 
     public function adminDashboard() {
-        return view('admin.dashboard');
+        return view('mis.dashboard');
     }
 
     public function logout(Request $request) {
