@@ -21,6 +21,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_pic',
+        'role',
+        'department_id',
     ];
 
     /**
@@ -45,4 +48,15 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function department() {
+        return $this->belongsTo(Department::class, 'department_id');
+    }
+
+    public function tickets() {
+        return $this->hasMany(Ticket::class, 'requester_id');
+    }
+    // public function replies() {
+    //     return $this->hasMany(Replies::class);
+    // }
 }
