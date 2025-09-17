@@ -7,43 +7,36 @@
     <title>Dashboard</title>
     @vite('resources/css/app.css')
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center font-sans">
-
-    <div class="w-full max-w-md bg-white shadow-lg rounded-2xl p-6">
-        <h1 class="text-2xl font-bold text-gray-800 text-center mb-4">
-            Welcome to your Dashboard
-        </h1>
-
-        {{-- Success Message --}}
-        @if(session('success'))
-            <div class="mb-4">
-                <p class="bg-green-100 text-green-800 px-4 py-2 rounded-md text-sm font-medium">
-                    {{ session('success') }}
-                </p>
-            </div>
-        @endif
-
-        <p class="text-gray-700 mb-2">
-            You are logged in as:
-            <span class="font-semibold text-blue-600">{{ Auth::user()->name }}</span>
-        </p>
-
-        @if (Auth::user()->role === 'admin')
-            <p class="text-sm text-purple-600 font-medium mb-4">You're an admin.</p>
-        @else
-            <p class="text-sm text-gray-600 font-medium mb-4">You're a regular user.</p>
-        @endif
-
-        <form action="{{ route('logout') }}" method="POST" class="mt-4">
+<body class="bg-gray-100 min-h-screen font-sans">
+    <nav class="flex justify-between items-center p-4 bg-white shadow-sm">
+        <div class="flex items-center space-x-3">
+            <img src="{{ asset('/storage/logo/lvcclogo.png') }}" alt="Logo" class="w-10 h-10">
+            <h1 class="text-xl font-semibold">iServe LVCC</h1>
+        </div>
+        <form action="{{ route('logout') }}" method="POST" class="inline">
             @csrf
-            <button
-                type="submit"
-                class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
-            >
-                Logout
-            </button>
+            <button type="submit" class="text-blue-500 hover:text-blue-700 bg-transparent border-none cursor-pointer">Logout</button>
         </form>
-    </div>
+    </nav>
 
+    <main class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8">Dashboard</h1>
+        <p class="text-gray-700 mb-2">Welcome, {{ Auth::user()->name }}!</p>
+        
+        @if (Auth::user()->tickets->count() > 0)
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach (Auth::user()->tickets as $ticket)
+                    <div class="bg-white p-6 rounded-lg shadow-md">
+                        <h2 class="text-xl font-semibold mb-2">{{ $ticket->title }}</h2>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <form action="{{ route('create-ticket') }}" method="GET">
+                @csrf
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create Ticket</button>
+            </form>
+        @endif
+    </main>
 </body>
 </html>

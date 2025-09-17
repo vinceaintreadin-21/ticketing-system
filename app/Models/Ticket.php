@@ -16,13 +16,20 @@ class Ticket extends Model
         'priority',
         'expected_completion_date',
         'status',
-        'priority'
+        'priority',
+        'department_id',
+        'requester_id'
     ];
+    
     public function requester() {
         return $this->belongsTo(User::class, 'requester_id');
     }
 
     public function attachments(){
         return $this->hasMany(TicketAttachment::class);
+    }
+
+    public function department() {
+        return $this->belongsTo(Department::class, 'department_id');
     }
 }
