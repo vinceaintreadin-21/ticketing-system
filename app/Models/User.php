@@ -20,7 +20,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'password',
+        'status',
+        'provider',
+        'provider_id',
+        'avatar'
     ];
 
     /**
@@ -44,5 +47,31 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    //eloquent relationships
+
+    public function roles() {
+        return $this->belongsToMany(Role::class, 'user_roles', 'user_id', 'role_id');
+    }
+
+    public function ticketsRequested() {
+        return $this->hasMany(Ticket::class, 'requester_id');
+    }
+
+    public function ticketsAssigned() {
+        return $this->hasMany(Ticket::class, 'assigned_staff_id');
+    }
+
+    public function ticketNotes() {
+        return $this->hasMany(TicketNote::class, 'author_id');
+    }
+
+    public function notification() {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
+
+    public function feedback() {
+        return $this->hasMany(Feedback::class, 'requester_id');
     }
 }

@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class TicketNote extends Model
+{
+    protected $primaryKey = 'note_id';
+    public $timestamps = false;
+    protected $fillable = [
+        'ticket_id', 'author_id', 'note_type', 'content',
+        'file_name', 'file_path', 'file_type', 'created_at'
+    ];
+
+    public function ticket()
+    {
+        return $this->belongsTo(Ticket::class, 'ticket_id');
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_id');
+    }
+}

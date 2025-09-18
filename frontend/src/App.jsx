@@ -3,15 +3,22 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import Sample from './Sample'
-import 
+import {BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return(
-   <>
-    <Sample />
-   </>
+    <>
+      <Router>
+        <nav>
+          <Link to='/sample-hello'>Sample</Link>
+        </nav>
+
+        <Routes>
+          <Route path='/sample-hello' element={<Sample />}/>
+        </Routes>
+      </Router>
+      
+    </>
   )
 }
 

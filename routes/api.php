@@ -13,4 +13,4 @@ Route::middleware('api')->get('/ping', function () {
     return response()->json(['message' => 'API is working!']);
 });
 
-Route::get('sample-hello', [SampleController::class, 'hello']);
+Route::get('/sample-hello', [SampleController::class, 'hello']);
