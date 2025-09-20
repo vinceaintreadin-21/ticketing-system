@@ -1,20 +1,20 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import Sample from './Sample'
 import {BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom'
+import SSOLogin from './guest/SSOLogin'
+import SSOCallback from './guest/SSOCallback'
+import Dashboard from './auth/Dashboard'
 
 function App() {
   return(
     <>
       <Router>
-        <nav>
-          <Link to='/sample-hello'>Sample</Link>
-        </nav>
-
         <Routes>
-          <Route path='/sample-hello' element={<Sample />}/>
+            <Route path='/login' element={<SSOLogin/>}/>
+            <Route path='/sso/callback' element={<SSOCallback/>}/>
+            <Route path='/dashboard' element={<Dashboard/>}/>
+
+            <Route path='*' element={<SSOLogin />}/>
         </Routes>
       </Router>
       
