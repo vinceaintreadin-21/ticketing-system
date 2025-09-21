@@ -17,7 +17,7 @@ export default defineConfig({
     emptyOutDir: true,
     manifest: true,
     rollupOptions: {
-      input: '/src/index.html', // your entry point
+      input: 'index.html', // your entry point
     },
   },
 })
