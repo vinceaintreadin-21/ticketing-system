@@ -1,4 +1,4 @@
-import './App.css'
+// import './App.css'
 import Sample from './Sample'
 import {BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom'
 import SSOLogin from './guest/SSOLogin'
@@ -17,7 +17,7 @@ function App() {
             <Route path='*' element={<SSOLogin />}/>
         </Routes>
       </Router>
-      
+
     </>
   )
 }
