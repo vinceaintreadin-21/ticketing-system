@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Feedback extends Model
 {
-    protected $primaryKey = 'feedback_id';
     protected $fillable = ['ticket_id', 'requester_id', 'rating', 'comments'];
 
     public function ticket()

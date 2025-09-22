@@ -7,8 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class PreTicketCommunication extends Model
 {
     protected $table = 'pre_ticket_communications';
-    protected $primaryKey = 'communication_id';
-    public $timestamps = false;
     protected $fillable = ['requester_id', 'mis_staff_id', 'issue_description', 'suggested_solution', 'created_at'];
 
     public function requester()
