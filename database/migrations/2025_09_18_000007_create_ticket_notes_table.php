@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('ticket_notes', function (Blueprint $table) {
             $table->id();
-            $table->foreign('ticket_id')->constrained('tickets')->cascadeOnDelete();
-            $table->foreign('author_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('ticket_id')->constrained('tickets')->cascadeOnDelete();
+            $table->foreignId('author_id')->constrained('users')->cascadeOnDelete();
             $table->enum('note_type', ['Internal', 'External']);
             $table->text('content');
             $table->string('file_name')->nullable();

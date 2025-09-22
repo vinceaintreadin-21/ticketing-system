@@ -11,11 +11,10 @@ return new class extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('ticket_id')->constrained('tickets')->nullOnDelete();
+            $table->foreignId('ticket_id')->nullable()->constrained('tickets')->nullOnDelete();
             $table->text('message');
             $table->boolean('is_read')->default(false);
             $table->timestamps();
-
 
         });
     }
