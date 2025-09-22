@@ -9,9 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ticket_notes', function (Blueprint $table) {
-            $table->id('note_id');
-            $table->unsignedBigInteger('ticket_id');
-            $table->unsignedBigInteger('author_id');
+            $table->id();
+            $table->foreign('ticket_id')->constrained('tickets')->cascadeOnDelete();
+            $table->foreign('author_id')->constrained('users')->cascadeOnDelete();
             $table->enum('note_type', ['Internal', 'External']);
             $table->text('content');
             $table->string('file_name')->nullable();
@@ -19,8 +19,7 @@ return new class extends Migration
             $table->string('file_type')->nullable();
             $table->timestamp('created_at')->useCurrent();
 
-            $table->foreign('ticket_id')->references('ticket_id')->on('tickets')->onDelete('cascade');
-            $table->foreign('author_id')->references('user_id')->on('users')->onDelete('cascade');
+
         });
     }
 

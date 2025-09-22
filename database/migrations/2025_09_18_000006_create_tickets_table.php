@@ -9,20 +9,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tickets', function (Blueprint $table) {
-            $table->id('ticket_id');
-            $table->unsignedBigInteger('requester_id');
-            $table->unsignedBigInteger('assigned_staff_id')->nullable();
-            $table->unsignedBigInteger('category_id');
+            $table->id();
+            $table->foreignId('requester_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('assigned_staff_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('category_id')->constrained('categories');
             $table->enum('urgency_level', ['Low', 'Medium', 'High']);
             $table->enum('status', ['Pending', 'In Progress', 'Resolved', 'Closed']);
             $table->text('issue_description');
             $table->text('resolution_notes')->nullable();
             $table->timestamp('resolved_at')->nullable();
             $table->timestamps();
-
-            $table->foreign('requester_id')->references('user_id')->on('users')->onDelete('cascade');
-            $table->foreign('assigned_staff_id')->references('user_id')->on('users')->nullOnDelete();
-            $table->foreign('category_id')->references('category_id')->on('categories');
         });
     }
 

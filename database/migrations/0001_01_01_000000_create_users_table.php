@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('avatar')->nullable()->after('email');
+            $table->string('avatar')->nullable();
             $table->string('status')->nullable();
             $table->string('provider')->nullable();
             $table->unsignedBigInteger('provider_id')->nullable();

@@ -9,7 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('permissions', function (Blueprint $table) {
-            $table->id('permission_id');
+            $table->id();
             $table->string('permission_name');
             $table->timestamps();
         });

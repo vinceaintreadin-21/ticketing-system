@@ -9,15 +9,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ticket_history', function (Blueprint $table) {
-            $table->id('log_id');
-            $table->unsignedBigInteger('ticket_id');
-            $table->unsignedBigInteger('performed_by');
+            $table->id();
+            $table->foreignId('ticket_id')->constrained('tickets')->cascadeOnDelete();
+            $table->foreignId('performed_by')->constrained('users')->cascadeOnDelete();
             $table->string('action');
             $table->text('details');
             $table->timestamp('created_at')->useCurrent();
-
-            $table->foreign('ticket_id')->references('ticket_id')->on('tickets')->onDelete('cascade');
-            $table->foreign('performed_by')->references('user_id')->on('users')->onDelete('cascade');
         });
     }
 
