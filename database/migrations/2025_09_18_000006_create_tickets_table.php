@@ -13,6 +13,8 @@ return new class extends Migration
             $table->foreignId('requester_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('assigned_staff_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('category_id')->constrained('categories');
+            $table->string('ticket_number')->unique();
+            $table->string('other_category')->nullable();
             $table->enum('urgency_level', ['Low', 'Medium', 'High']);
             $table->enum('status', ['Pending', 'In Progress', 'Resolved', 'Closed']);
             $table->text('issue_description');

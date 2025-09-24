@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('avatar')->nullable();
             $table->string('status')->nullable();
             $table->string('provider')->nullable();
-            $table->unsignedBigInteger('provider_id')->nullable();
+            $table->string('provider_id')->nullable();
             $table->timestamps();
         });
 
