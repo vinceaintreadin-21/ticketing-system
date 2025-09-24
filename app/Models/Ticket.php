@@ -13,6 +13,8 @@ class Ticket extends Model
         'category_id',
         'urgency_level',
         'status',
+        'ticket_number',
+        'other_category',
         'issue_description',
         'resolution_notes'
     ];

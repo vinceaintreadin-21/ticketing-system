@@ -8,7 +8,7 @@ class TicketNote extends Model
 {
     protected $fillable = [
         'ticket_id', 'author_id', 'note_type', 'content',
-        'file_name', 'file_path', 'file_type', 'created_at'
+        'file_name', 'file_path', 'file_type'
     ];
 
     public function ticket()
