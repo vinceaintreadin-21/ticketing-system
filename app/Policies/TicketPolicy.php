@@ -2,14 +2,13 @@
 
 namespace App\Policies;
 
-use App\Models\Ticket;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\Ticket;
 
 class TicketPolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * Create a new policy instance.
      */
     public function viewAny(User $user): bool
     {
@@ -72,4 +71,6 @@ class TicketPolicy
     {
         return false;
     }
+
+
 }

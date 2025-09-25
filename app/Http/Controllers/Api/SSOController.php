@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Laravel\Socialite\Facades\Socialite;
+use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -26,6 +27,8 @@ class SSOController extends Controller
                     ->where('provider_id', $socialUser->getId())
                     ->first();
 
+        $isNewUser = false;
+
         if (!$user) {
             // If the user doesn't exist, create a new one
             $user = User::create([
@@ -36,9 +39,28 @@ class SSOController extends Controller
                 'avatar' => $socialUser->getAvatar(),
                 'status' => 'active',
             ]);
+
+            $isNewUser = true;
         }
 
         $user->refresh();
+
+        if($isNewUser)
+        {
+            if(str_ends_with($socialUser->getEmail(), '')) {
+
+                $role = Role::where('role_name', 'mis')->first();
+
+            } else {
+
+                $role = Role::where('role_name', 'requester')->first();
+
+            }
+
+            if ($role) {
+                $user->roles()->syncWithoutDetaching([$role->id]);
+            }
+        }
 
         // Generate Sanctum token for API authentication
         $token = $user->createToken('auth_token')->plainTextToken;
